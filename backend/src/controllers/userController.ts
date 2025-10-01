@@ -1,21 +1,30 @@
 import { Request, Response } from "express";
-import { userService } from "../services/userServices";
+import * as userService from "../services/userServices";
 
-export const getUsers = async (req: Request, res: Response) => {
+
+export const createUser = async (req: Request, res: Response) => {
   try {
-    const users = await userService.getAllUsers();
-    res.json(users);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    const user = await userService.createUser(req.body);
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Error al crear usuario" });
   }
 };
 
-export const addUser = async (req: Request, res: Response) => {
-  try {
-    const { name, email } = req.body;
-    const newUser = await userService.createUser(name, email);
-    res.status(201).json(newUser);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
+export const getUsers = async (_req: Request, res: Response) => {
+  const users = await userService.getUsers();
+  res.json(users);
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+  const user = await userService.getUserById(Number(req.params.id));
+  if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+  res.json(user);
+};
+
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const user = await userService.deleteUser(Number(req.params.id));
+  if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+  res.json({ message: "Usuario eliminado" });
 };
