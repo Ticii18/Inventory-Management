@@ -24,7 +24,7 @@ export const authService = {
   async createUser(nombre: string, email: string, plainPassword: string, rol_id: number) {
     const hashed = await bcrypt.hash(plainPassword, SALT_ROUNDS);
     const res = await pool.query(
-      `INSERT INTO usuarios (nombre, email, password, rol_id) VALUES ($1, $2, $3, $4) RETURNING id, nombre, email, rol_id`,
+      `INSERT INTO usuarios (nombre, email, password, rol_id) VALUES ($1, $2, $3, $4) RETURNING id_usuario, nombre, email, rol_id`,
       [nombre, email, hashed, rol_id]
     );
     return res.rows[0];
