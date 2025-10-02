@@ -1,59 +1,200 @@
-Contexto: 
-La empresa FORMOTEX se dedica al mantenimiento y distribución de equipos informáticospara diversas organizaciones. 
-Actualmente, el inventario se gestiona de forma manual, lo que genera errores frecuentes como: ● Información desactualizada del estado de los equipos. 
-● Falta de control de ubicación. 
-● Dificultad para saber quién es el responsable de cada equipo. 
-La nueva aplicación deberá permitir un control centralizado, seguro y validado del inventario. Además, cada alumno deberá definir, según su propia abstracción, las funcionalidades adicionales, propiedades y relaciones que considere necesarias para un manejo completo y eficiente de los equipos informáticos dentro del sistema. 
-Requerimientos: 
-1. Funcionalidades CRUD: 
-∙ La aplicación debe permitir las operaciones básicas de gestión de equipos informáticos. 
-∙ Solo los usuarios autenticados podrán acceder a los endpoints protegidos. 
-∙ Cada equipo debe estar asignado a un responsable (un usuario de la empresa). 
-∙ Las entidades no deben ser simples; se espera que los equipos tengan
-propiedades más allá de solo nombre y responsable. 
-2. Autenticación con JWT: 
-∙ Implementar un sistema de autenticación utilizando JWT. 
-∙ Los usuarios deben iniciar sesión utilizando un endpoint de autenticación. 
-∙ Al autenticarse, el backend debe generar un token firmado que 
-será usado para acceder a los endpoints protegidos. 
-∙ Definir al menos dos roles de usuario: 
-▪ admin: acceso total a la aplicación (gestión de usuarios, 
-equipos, asignaciones, eliminación). 
-▪ user: acceso limitado (gestionar únicamente los equipos a 
-su cargo o alguna funcionalidad que se considere). 
-∙ Los endpoints deben requerir un token válido, y un rol específico de usuario en el caso que lo necesite. 
-∙ Endpoints: 
-▪ POST api/auth/login: Debe permitir a los usuarios 
-autenticarse con sus credenciales(usuario y contraseña). 
-▪ POST api/auth/register: Debe permitir el registro de nuevos 
-usuarios(restringido a administradores). 
-▪ Todos los demás endpoints (no relacionados con autenticación) 
-deben comenzar, como mínimo, con el prefijo /api/... 
-▪ Cada alumno deberá diseñar y documentar los endpoints restantes 
-de acuerdo con las funcionalidades, relaciones y validaciones que 
-definan en su modelo de inventario.
-3. Backend con TypeScript: 
-∙ El proyecto debe desarrollarse utilizando Node.js + Express + TypeScript, aplicando
-tipado estricto y buenas prácticas de organización. 
-∙ La lógica de negocio debe implementarse en una capa de servicios, manteniendoalos
-controladores únicamente para la gestión de solicitudes y respuestas. 
-∙ Se deben utilizar helpers y middlewares para tareas comunes (ej: manejo de tokens, validaciones, etc). 
-∙ Las validaciones pueden implementarse mediante librerías como express-validator ocon funciones propias diseñadas como helpers. 
-4. Validaciones y Control de Acceso a Endpoints: 
-∙ Todos los endpoints deben contar con validaciones. 
-∙ Se debe implementar un sistema de permisos basado en roles. 
-∙ El sistema debe implementar validaciones de unicidad en las entidades principales. 
-∙ Se espera que no puedan registrarse datos duplicados (ejemplo: email). 
-∙ Cada alumno debe investigar y decidir: 
-▪ Cómo organizar las validaciones (middlewares servicios, controladores, 
-helpers). 
-▪ Cómo manejar las respuestas y errores (códigos de estado HTTP, mensajes
-personalizados). 
-El objetivo es que cada alumno aplique criterio propio y pueda justificar susdecisiones técnicas. 
-5. Documentación requerida: 
-En un archivo README.md en el proyecto se deberá incluir, como mínimo: 
-● Instrucciones para ejecutar el proyecto: dependencias necesarias, comandos para iniciar el backend, configuración de variables de entorno, etc. 
-● Justificación técnica: explicación detallada de las decisiones tomadas respecto a: ■ Diseño de relaciones entre entidades. 
-■ Organización de carpetas. 
-■ Propiedades relevantes elegidas para cada entidad. 
-■ Elección de librerías o patrones de arquitectura. 
+<div align="center">
+
+# 🎛️ FORMOTEX — Inventario de Equipos (Backend)
+
+API REST construida con Node.js, Express y TypeScript para gestionar usuarios y equipos informáticos, con autenticación JWT y PostgreSQL.
+
+<p>
+	<img alt="Node" src="https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white" />
+	<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Strict-3178C6?logo=typescript&logoColor=white" />
+	<img alt="Express" src="https://img.shields.io/badge/Express.js-4.x-000000?logo=express&logoColor=white" />
+	<img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-14%2B-4169E1?logo=postgresql&logoColor=white" />
+	<img alt="JWT" src="https://img.shields.io/badge/JWT-Auth-000000?logo=jsonwebtokens&logoColor=white" />
+</p>
+
+</div>
+
+---
+
+## 📚 Tabla de contenidos
+
+- [🚀 Instrucciones para ejecutar el backend](#-instrucciones-para-ejecutar-el-backend)
+- [🧩 Endpoints disponibles](#-endpoints-disponibles)
+- [🧪 Pruebas rápidas](#-pruebas-rápidas)
+- [🧱 Estructura del proyecto](#-estructura-del-proyecto)
+- [🧠 Justificación técnica](#-justificación-técnica)
+- [🔮 Próximos pasos](#-próximos-pasos)
+
+---
+
+## 🚀 Instrucciones para ejecutar el backend
+
+Este documento cumple el punto “Documentación requerida”: contiene dependencias necesarias, comandos para iniciar el backend, configuración de variables de entorno, y justificación técnica.
+
+## 1) Instrucciones para ejecutar el backend
+
+### Requisitos previos
+
+- Node.js 18+ y npm
+- PostgreSQL (configurado localmente) — si no lo tienes, instala PostgreSQL y crea la base de datos indicada en Variables de entorno
+
+### Instalación
+
+```bash
+# Desde la raíz del proyecto
+cd backend
+
+# Instalar dependencias
+npm install
+```
+
+### Variables de entorno
+
+Crea un archivo `.env` en `backend/` con el siguiente contenido (ejemplo real del proyecto):
+
+```env
+# Servidor
+PORT=3000
+NODE_ENV=development
+
+# Base de datos PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=InventarioDB
+DB_USER=postgres
+DB_PASSWORD=2204
+
+# Autenticación
+JWT_SECRET=una_clave_muy_secreta_que_nadie_debe_saber
+JWT_EXPIRES_IN=1h
+BCRYPT_SALT_ROUNDS=10
+
+```
+
+Sugerencias:
+
+- Cambia `DB_PASSWORD` por tu contraseña real de PostgreSQL.
+- Asegúrate de que la base `InventarioDB` exista en tu servidor local de PostgreSQL.
+
+### Comandos disponibles
+
+```bash
+# Desarrollo con recarga automática
+npm run dev
+
+# Compilar TypeScript a JavaScript en dist/
+npm run build
+
+# Ejecutar compilado (producción local)
+npm start
+
+# Limpiar carpeta dist/
+npm run clean
+```
+
+### Levantar el backend
+
+```bash
+cd backend
+npm run dev
+```
+
+Por defecto el servidor se inicia en: http://localhost:3000
+
+---
+
+## 🧩 Endpoints disponibles
+
+Base URL: `http://localhost:3000`
+
+- Healthcheck: `GET /api/health`
+- Autenticación:
+	- `POST /api/auth/login`
+	- `POST /api/auth/register` (protegido: requiere rol `admin`)
+- Usuarios (`/api/users`):
+	- `POST /api/users`
+	- `GET /api/users`
+	- `GET /api/users/:id`
+	- `DELETE /api/users/:id`
+- Equipos (`/api/equip`):
+	- `POST /api/equip`
+	- `GET /api/equip`
+	- `GET /api/equip/:id`
+	- `DELETE /api/equip/:id`
+
+Autenticación de rutas protegidas mediante header:
+
+```http
+Authorization: Bearer <token>
+```
+
+---
+
+## 🧠 Justificación técnica
+
+### Diseño de entidades y relaciones
+
+- Usuario (`User`):
+	- Propiedades típicas: `id`, `nombre`, `email` (único), `password` (hash), `rol` (`admin` | `user`), `createdAt`, `updatedAt`.
+	- Razón: el email es la clave natural única para autenticación; se aplica hash a la contraseña con `bcrypt`.
+- Equipo (`Equipment`):
+	- Propiedades esperadas: `id`, `nombre`, `tipo`, `marca`, `modelo`, `numeroSerie`, `estado` (ej. operativo, en reparación, dado de baja), `ubicacion`, `asignadoA` (FK a `User.id`), `observaciones`, `createdAt`, `updatedAt`.
+	- Relación principal: un usuario puede tener muchos equipos asignados (1:N). Esta relación permite saber el responsable actual de cada equipo.
+
+Decisiones clave:
+
+- Se prioriza un modelo con campos “relevantes” más allá del nombre, para apoyar mantenibilidad, auditoría y trazabilidad.
+- Se define unicidad por `email` en usuarios; en equipos es recomendable unicidad por `numeroSerie`.
+
+### Organización de carpetas (arquitectura por capas)
+
+```
+src/
+	controllers/      # Traducen HTTP ↔ dominio. Sin lógica de negocio.
+	services/         # Lógica de negocio y orquestación de datos.
+	routes/           # Rutas HTTP a controllers.
+	middleware/       # Autenticación, autorización, validaciones.
+	helpers/          # Utilidades (JWT, etc.).
+	models/           # Modelos/Tipos de dominio.
+	types/            # Tipos de TS y extensiones (por ej., Request.user).
+	database.ts       # Conexión a PostgreSQL.
+	app.ts            # Bootstrap del servidor y wiring de middlewares/rutas.
+```
+
+Razones:
+
+- Separación de responsabilidades (SRP) para mejorar mantenibilidad y testeabilidad.
+- Evita “controllers gordos”; la lógica vive en `services/`.
+- `middleware/` centraliza preocupaciones transversales (auth, permisos, validación).
+
+### Propiedades relevantes por entidad
+
+- Usuario: `email` único, `rol` para control de permisos, timestamps para auditoría.
+- Equipo: `numeroSerie` único `asignadoA` para responsabilidad.
+
+### Librerías seleccionadas y motivo
+
+- `dotenv`: gestión de configuración por entorno 
+- `jsonwebtoken`: emisión/verificación de JWT para auth.
+- `bcrypt`/`bcryptjs`: hash seguro de contraseñas (configurable con `BCRYPT_SALT_ROUNDS`).
+- `pg`: cliente PostgreSQL nativo.
+- `helmet` y `morgan`: seguridad de cabeceras y logging HTTP (disponibles para fortalecer prod).
+- `tsx`: experiencia rápida en desarrollo con ES Modules y TS.
+- `typescript`: tipado estricto para prevenir errores y mejorar DX.
+
+### Prácticas y patrones
+
+- Arquitectura en capas: `Route → Controller → Service → Data`.
+- Middlewares: `authenticate` (valida JWT) y `authorize` (verifica rol, p. ej. `admin`).
+- Tipado estricto (TS) y `tsconfig` con `strict`, `noUnused*`, etc.
+- ES Modules (`"type": "module"`) para alinearse con el estándar moderno.
+
+### Control de acceso y validaciones
+
+- Autenticación: JWT via header `Authorization: Bearer <token>`.
+- Autorización por roles vía `authorize("admin")` en endpoints sensibles (por ejemplo, registro de usuarios).
+- Unicidad: `email` (usuarios) y recomendado `numeroSerie` (equipos).
+- Validaciones: centralizables en middleware o services según complejidad (futuro: integrar `express-validator` o esquemas con Zod/Yup).
+
+
+---

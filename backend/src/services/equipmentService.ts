@@ -45,44 +45,6 @@ export const getEquipById = async (id: number) => {
   return (result.rows[0] as Equipment) || null;
 };
 
-// Actualizar equipo (parcial)
-export const updateEquip = async (id: number, data: UpdateEquipmentRequest) => {
-  const fields: string[] = [];
-  const values: any[] = [];
-  let i = 1;
-
-  if (data.nombre !== undefined) {
-    fields.push(`nombre = $${i++}`);
-    values.push(data.nombre);
-  }
-  if (data.marca !== undefined) {
-    fields.push(`marca = $${i++}`);
-    values.push(data.marca);
-  }
-  if (data.modelo !== undefined) {
-    fields.push(`modelo = $${i++}`);
-    values.push(data.modelo);
-  }
-  if (data.responsable_id !== undefined) {
-    fields.push(`responsable_id = $${i++}`);
-    values.push(data.responsable_id);
-  }
-
-  if (fields.length === 0) {
-    return await getEquipById(id);
-  }
-
-  values.push(id);
-  const result = await query(
-    `UPDATE equipos
-     SET ${fields.join(", ")}
-     WHERE id_usuario = $${i}
-     RETURNING id_usuario, nombre, marca, modelo, numero_serie, responsable_id, fecha_registro`,
-    values
-  );
-
-  return (result.rows[0] as Equipment) || null;
-};
 
 // Eliminar equipo
 export const deleteEquip = async (id: number) => {
@@ -90,7 +52,7 @@ export const deleteEquip = async (id: number) => {
     "DELETE FROM equipos WHERE id_usuario = $1 RETURNING id_usuario",
     [id]
   );
-  return result.rows[0]; // mismo patrón que deleteUser
+  return result.rows[0];
 };
 
 // Equipos por responsable
