@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -183,18 +183,7 @@ function Login() {
           </div>
         </form>
 
-        {/* Footer */}
-        <div className="text-center">
-          <p className="text-sm text-gray-400">
-            ¿No tienes cuenta?{' '}
-            <Link 
-              to="/register" 
-              className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              Contacta al administrador
-            </Link>
-          </p>
-        </div>
+        {/* Footer vacío intencionalmente para auth-only */}
       </div>
     </div>
   );

@@ -25,15 +25,8 @@ export const ROUTES = {
   
   // Protegidas
   DASHBOARD: '/dashboard',
-  EQUIPMENT: '/equipment',
-  
-  // Admin
-  USERS: '/users',
-  REGISTER: '/register',
-  SETTINGS: '/settings',
   
   // Especiales
-  TEST: '/test',
   NOT_FOUND: '*'
 };
 
